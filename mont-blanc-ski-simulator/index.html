@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Mont Blanc Ski Simulator — Chamonix Real Terrain</title>
+    <meta
+      name="description"
+      content="First-person Three.js ski simulator on real Chamonix / Mont Blanc elevation data with carved snow tracks, cyan glacier ice, live avalanches, and pink sunset alpenglow."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.min.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="canvas-container" aria-label="Mont Blanc 3D Ski World"></div>
+    <canvas id="speed-blur-canvas" aria-hidden="true"></canvas>
+    <div id="whiteout-overlay" aria-hidden="true"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="overlay">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <p id="loading-text">Loading real Chamonix / Mont Blanc elevation data…</p>
+      </div>
+    </div>
+
+    <!-- Start Screen Overlay -->
+    <main id="start-overlay" class="overlay hidden">
+      <section class="modal-card">
+        <div class="eyebrow">Chamonix-Mont-Blanc • 45.83°N 6.86°E</div>
+        <h1>Mont Blanc Ski Simulator</h1>
+        <p class="subtitle">
+          Carve a real 6 km Glacier des Bossons descent beneath the 4,808 m summit. Leave permanent tracks in fresh
+          powder, cross cyan glacier ice, weave through lower pines, and outrun live avalanches.
+        </p>
+
+        <div class="meta-strip">
+          <div class="meta-item">
+            <span class="meta-label">Start Elev</span>
+            <span class="meta-value">3,316 m</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Vertical Drop</span>
+            <span class="meta-value">2,119 m</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Best Run</span>
+            <span class="meta-value" id="start-best-time">--:--.-</span>
+          </div>
+        </div>
+
+        <div class="tod-panel">
+          <div class="tod-header">
+            <span>Time of Day</span>
+            <strong id="tod-label-start">Pink Sunset</strong>
+          </div>
+          <input
+            id="tod-slider-start"
+            class="tod-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.84"
+            aria-label="Time of day"
+          />
+          <div class="tod-presets">
+            <button type="button" class="chip-btn" data-tod="0.22">Morning</button>
+            <button type="button" class="chip-btn" data-tod="0.48">Midday</button>
+            <button type="button" class="chip-btn" data-tod="0.72">Golden</button>
+            <button type="button" class="chip-btn active" data-tod="0.88">Pink Sunset</button>
+          </div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="control-row"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> Carve edges</div>
+          <div class="control-row"><kbd>↑</kbd> / <kbd>W</kbd> Aero tuck</div>
+          <div class="control-row"><kbd>↓</kbd> / <kbd>S</kbd> Edge brake</div>
+          <div class="control-row"><kbd>Space</kbd> Jump crests</div>
+          <div class="control-row"><kbd>V</kbd> Trigger avalanche</div>
+          <div class="control-row"><kbd>R</kbd> Instant restart</div>
+        </div>
+
+        <div class="actions-row">
+          <button id="btn-start" class="btn-primary" type="button">Drop In</button>
+          <button id="btn-tilt" class="btn-secondary" type="button">Enable Phone Tilt</button>
+        </div>
+
+        <p class="attribution">Real topography via AWS Open Data Terrain Tiles (Terrarium z13) • 100% procedural WebGL</p>
+      </section>
+    </main>
+
+    <!-- Live In-Run HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-top-bar">
+        <div class="hud-pill timer-cluster">
+          <div class="stat-block">
+            <span class="stat-label">Time</span>
+            <span class="stat-value" id="hud-timer">00:00.0</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">Best</span>
+            <span class="stat-value small" id="hud-best">--:--.-</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">Elevation</span>
+            <span class="stat-value small" id="hud-elev">3,316 m</span>
+          </div>
+          <div class="progress-cluster">
+            <div class="progress-track">
+              <div class="progress-fill" id="hud-progress-fill"></div>
+            </div>
+            <div class="progress-caption">
+              <span>Bossons</span>
+              <span id="hud-dist">6,000 m to Chamonix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-controls">
+          <div class="hud-pill tod-mini">
+            <span id="tod-label">Pink Sunset</span>
+            <input
+              id="tod-slider"
+              class="tod-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.84"
+              aria-label="Live time of day"
+            />
+          </div>
+          <button id="btn-avalanche-hud" class="hud-btn" type="button" title="Trigger slab avalanche (V)">
+            Avalanche
+          </button>
+          <button id="btn-mute" class="hud-btn" type="button">Sound: On</button>
+          <button id="btn-restart-hud" class="hud-btn" type="button" title="Restart run (R)">Restart</button>
+          <span class="hud-pill hud-fps" id="hud-fps">60 FPS</span>
+        </div>
+      </div>
+
+      <div id="avalanche-banner" class="hidden" role="alert">
+        <span>AVALANCHE ACTIVE — OUTRUN IT</span>
+        <span id="avalanche-dist">58 m</span>
+      </div>
+
+      <div id="event-toast" aria-live="polite"></div>
+
+      <div class="hud-bottom-left">
+        <div class="hud-pill speed-card">
+          <span class="speed-number" id="hud-speed">0</span>
+          <span class="speed-unit">km/h</span>
+        </div>
+        <div class="surface-tag" id="hud-surface" data-mode="snow">POWDER</div>
+      </div>
+
+      <!-- Mobile Touch Controls (auto-displayed on touchscreens) -->
+      <div id="touch-controls">
+        <div class="touch-cluster">
+          <button id="touch-left" class="touch-btn" type="button" aria-label="Carve left">◀</button>
+          <button id="touch-right" class="touch-btn" type="button" aria-label="Carve right">▶</button>
+        </div>
+        <div class="touch-cluster">
+          <button id="touch-brake" class="touch-btn" type="button" aria-label="Brake">BRAKE</button>
+          <button id="touch-tuck" class="touch-btn" type="button" aria-label="Tuck">TUCK</button>
+          <button id="touch-jump" class="touch-btn" type="button" aria-label="Jump">JUMP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wipeout / Crash Overlay -->
+    <div id="crash-overlay" class="overlay hidden">
+      <section class="modal-card">
+        <div class="eyebrow">Wipeout</div>
+        <h1>Down on the Slope</h1>
+        <p class="crash-detail" id="crash-reason">Hit a granite boulder</p>
+        <p class="crash-sub" id="crash-stats"></p>
+        <div class="actions-row">
+          <button id="btn-retry-crash" class="btn-primary" type="button">Ski Again (R)</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Finish Line Overlay -->
+    <div id="finish-overlay" class="overlay hidden">
+      <section class="modal-card">
+        <div class="eyebrow">Chamonix Valley • 1,197 m</div>
+        <h1>Run Complete</h1>
+        <div class="finish-hero">
+          <span class="finish-clock" id="finish-time">00:00.0</span>
+          <span class="best-badge hidden" id="finish-best-badge">New Best</span>
+        </div>
+
+        <div class="meta-strip">
+          <div class="meta-item">
+            <span class="meta-label">Top Speed</span>
+            <span class="meta-value" id="finish-top-speed">0 km/h</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Max Airtime</span>
+            <span class="meta-value" id="finish-max-air">0.0 s</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Avalanches Outrun</span>
+            <span class="meta-value" id="finish-avalanches">0</span>
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button id="btn-play-again" class="btn-primary" type="button">Drop In Again (R)</button>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
