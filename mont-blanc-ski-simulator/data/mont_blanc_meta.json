@@ -1,0 +1,249 @@
+{
+  "source": "AWS Open Data Terrain Tiles (Terrarium z13)",
+  "region": "Mont Blanc / Glacier des Bossons / Chamonix, France",
+  "bounds": {
+    "latMin": 45.826,
+    "latMax": 45.94,
+    "lonMin": 6.805,
+    "lonMax": 6.925
+  },
+  "gridSize": 513,
+  "worldScale": 0.65,
+  "realWidthM": 9299.1,
+  "realDepthM": 12669.0,
+  "worldWidth": 6044.43,
+  "worldDepth": 8234.88,
+  "minElevM": 978.03,
+  "maxElevM": 4785.75,
+  "heightScale": 0.65,
+  "start": {
+    "x": -151.11,
+    "z": 1914.25,
+    "elevM": 3316.1,
+    "yaw": 2.53206
+  },
+  "finish": {
+    "x": -836.91,
+    "z": -1198.75,
+    "elevM": 1196.9,
+    "radius": 58.0
+  },
+  "waypoints": [
+    {
+      "x": -151.11,
+      "z": 1914.25,
+      "u": 0.475,
+      "v": 0.73246,
+      "elevM": 3316.1,
+      "slopeDeg": 30.6
+    },
+    {
+      "x": -79.02,
+      "z": 1698.68,
+      "u": 0.48693,
+      "v": 0.70628,
+      "elevM": 3184.8,
+      "slopeDeg": 15.8
+    },
+    {
+      "x": -1.48,
+      "z": 1450.51,
+      "u": 0.49975,
+      "v": 0.67614,
+      "elevM": 3108.3,
+      "slopeDeg": 12.8
+    },
+    {
+      "x": 57.05,
+      "z": 1195.2,
+      "u": 0.50944,
+      "v": 0.64514,
+      "elevM": 2989.4,
+      "slopeDeg": 17.4
+    },
+    {
+      "x": 174.64,
+      "z": 961.84,
+      "u": 0.52889,
+      "v": 0.6168,
+      "elevM": 2876.2,
+      "slopeDeg": 10.7
+    },
+    {
+      "x": 164.49,
+      "z": 702.37,
+      "u": 0.52721,
+      "v": 0.58529,
+      "elevM": 2738.0,
+      "slopeDeg": 28.9
+    },
+    {
+      "x": 100.35,
+      "z": 453.77,
+      "u": 0.5166,
+      "v": 0.5551,
+      "elevM": 2578.1,
+      "slopeDeg": 11.2
+    },
+    {
+      "x": 145.83,
+      "z": 200.51,
+      "u": 0.52413,
+      "v": 0.52435,
+      "elevM": 2504.0,
+      "slopeDeg": 15.0
+    },
+    {
+      "x": 54.51,
+      "z": -44.58,
+      "u": 0.50902,
+      "v": 0.49459,
+      "elevM": 2322.6,
+      "slopeDeg": 34.5
+    },
+    {
+      "x": -109.72,
+      "z": -250.26,
+      "u": 0.48185,
+      "v": 0.46961,
+      "elevM": 2033.9,
+      "slopeDeg": 37.9
+    },
+    {
+      "x": -281.44,
+      "z": -449.42,
+      "u": 0.45344,
+      "v": 0.44542,
+      "elevM": 1777.8,
+      "slopeDeg": 19.2
+    },
+    {
+      "x": -351.87,
+      "z": -700.52,
+      "u": 0.44179,
+      "v": 0.41493,
+      "elevM": 1606.2,
+      "slopeDeg": 32.3
+    },
+    {
+      "x": -501.71,
+      "z": -913.48,
+      "u": 0.417,
+      "v": 0.38907,
+      "elevM": 1411.1,
+      "slopeDeg": 25.4
+    },
+    {
+      "x": -714.25,
+      "z": -1035.24,
+      "u": 0.38183,
+      "v": 0.37429,
+      "elevM": 1223.1,
+      "slopeDeg": 7.9
+    },
+    {
+      "x": -738.54,
+      "z": -1111.78,
+      "u": 0.37781,
+      "v": 0.36499,
+      "elevM": 1218.8,
+      "slopeDeg": 5.6
+    },
+    {
+      "x": -836.91,
+      "z": -1198.75,
+      "u": 0.36154,
+      "v": 0.35443,
+      "elevM": 1196.9,
+      "slopeDeg": 12.0
+    }
+  ],
+  "avalancheZones": [
+    {
+      "x": 19.58,
+      "z": 1335.44,
+      "elevM": 3056.0,
+      "radius": 74.8,
+      "label": "Upper Bossons Face"
+    },
+    {
+      "x": 153.84,
+      "z": 675.13,
+      "elevM": 2713.2,
+      "radius": 74.8,
+      "label": "Serac Headwall"
+    },
+    {
+      "x": 36.82,
+      "z": -67.88,
+      "elevM": 2292.1,
+      "radius": 74.8,
+      "label": "Mid Glacier Bowl"
+    }
+  ],
+  "landmarks": [
+    {
+      "name": "Mont Blanc",
+      "lat": 45.8326,
+      "lon": 6.8652,
+      "x": 10.1,
+      "z": 3640.7,
+      "elevM": 4773.0,
+      "officialM": 4808
+    },
+    {
+      "name": "D\u00f4me du Go\u00fbter",
+      "lat": 45.8428,
+      "lon": 6.8442,
+      "x": -1047.7,
+      "z": 2903.9,
+      "elevM": 4280.0,
+      "officialM": 4304
+    },
+    {
+      "name": "Aiguille du Midi",
+      "lat": 45.8788,
+      "lon": 6.8874,
+      "x": 1128.3,
+      "z": 303.4,
+      "elevM": 3699.0,
+      "officialM": 3842
+    },
+    {
+      "name": "Mont Blanc du Tacul",
+      "lat": 45.8563,
+      "lon": 6.8886,
+      "x": 1188.7,
+      "z": 1928.7,
+      "elevM": 4133.0,
+      "officialM": 4248
+    },
+    {
+      "name": "Glacier des Bossons",
+      "lat": 45.878,
+      "lon": 6.854,
+      "x": -554.1,
+      "z": 361.2,
+      "elevM": 2328.0,
+      "officialM": 2450
+    },
+    {
+      "name": "Plan de l'Aiguille",
+      "lat": 45.901,
+      "lon": 6.884,
+      "x": 957.0,
+      "z": -1300.2,
+      "elevM": 2243.0,
+      "officialM": 2317
+    },
+    {
+      "name": "Chamonix Valley",
+      "lat": 45.922,
+      "lon": 6.866,
+      "x": 50.4,
+      "z": -2817.2,
+      "elevM": 1062.0,
+      "officialM": 1035
+    }
+  ]
+}
